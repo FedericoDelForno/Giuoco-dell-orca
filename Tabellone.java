@@ -1,0 +1,118 @@
+class Tabellone {
+    private Casella primo;      // riferimento al primo nodo della lista
+    private Casella ultimo;     // riferimento all'ultimo nodo della lista
+    private int lunghezza;   // numero di elementi inseriti nella lista
+
+    public Tabellone() {
+        primo = null;
+        ultimo = null;
+        lunghezza = 0;
+    }
+    
+    public Tabellone(int[] array) {
+        this(); // facoltativo
+        for(int i=0; i<array.length; i++) {
+            inserisciUltimo(array[i]);
+        }
+    }
+    
+    public Tabellone(Tabellone nuovaLista) {
+        this();
+        Casella nodo = nuovaLista.primo;
+        for(int i=0; i<nuovaLista.lunghezza; i++) {
+            this.inserisciUltimo(nodo.getElemento());
+            nodo = nodo.getSuccessivo();
+        }
+    }
+
+    // verifica se la lista e' vuota
+    public boolean vuota(){
+        return lunghezza == 0;
+    }
+
+    public int lunghezza(){
+        return lunghezza;
+    }
+
+    public int getPrimoElemento(){
+        return primo.getElemento();
+    }
+
+    public int getUltimoElemento(){
+        return ultimo.getElemento();
+    }
+
+    // Inserisce un nuovo elemento nella lista al primo posto
+    public void inserisciPrimo(int elemento){
+        primo = new Casella(elemento,primo);
+        if (vuota())
+            ultimo = primo;
+        lunghezza++;
+    }
+
+    // Inserisce un nuovo elemento nella lista in ultima posizione
+    public void inserisciUltimo(int elemento){
+        if (vuota())
+            inserisciPrimo(elemento);
+        else {
+            ultimo.setSuccessivo(new Casella(elemento,null));
+            ultimo = ultimo.getSuccessivo();
+            lunghezza++;
+        }
+    }
+    
+    public void inserisci(int elemento, int posizione) {
+    	Casella nuovoNodo = new Casella(elemento);
+    	Casella precedente = nodoIn(posizione-1);
+    	Casella seguente = precedente.getSuccessivo();
+        precedente.setSuccessivo(nuovoNodo);
+        nuovoNodo.setSuccessivo(seguente);
+        lunghezza++;
+    }
+    
+    public Casella nodoIn(int posizione) {
+    	Casella nodo = primo;
+        for(int salto=0; salto<posizione; salto++) {
+            nodo = nodo.getSuccessivo();
+        }
+        return nodo;
+    }
+    
+    public int elementoIn(int posizione) {
+        return nodoIn(posizione).getElemento();
+    }
+    
+    public String toString() {
+        String s = "";
+        Casella nodo = primo;
+        for(int salto=1; salto<=lunghezza; salto++) {
+            s += nodo.getElemento() + " ";
+            nodo = nodo.getSuccessivo();
+        }
+        return s;
+    }
+    
+    public void cancella(int posizione) {
+        // Cancella primo nodo
+        if(posizione==0) {
+            primo = primo.getSuccessivo();
+        }
+        // Cancella ultimo nodo
+        else if(posizione==lunghezza-1) {
+        	Casella penultimo = nodoIn(lunghezza-2);
+            penultimo = null;
+            ultimo = penultimo;
+        }
+        // Cancella nodo in mezzo
+        else {
+        	Casella precedente = nodoIn(posizione-1);
+        	Casella daEliminare = precedente.getSuccessivo();
+            precedente.setSuccessivo(daEliminare.getSuccessivo());
+        }
+        lunghezza--;
+    }
+    
+    
+    
+
+} 
