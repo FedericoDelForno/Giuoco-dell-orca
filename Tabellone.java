@@ -10,7 +10,7 @@ class Tabellone {
     }
     
     public Tabellone(int[] array) {
-        this(); // facoltativo
+        this(); 
         for(int i=0; i<array.length; i++) {
             inserisciUltimo(array[i]);
         }
@@ -30,7 +30,7 @@ class Tabellone {
         return lunghezza == 0;
     }
 
-    public int lunghezza(){
+    public int getLunghezza(){
         return lunghezza;
     }
 
@@ -44,10 +44,14 @@ class Tabellone {
 
     // Inserisce un nuovo elemento nella lista al primo posto
     public void inserisciPrimo(int elemento){
-        primo = new Casella(elemento,primo);
+    	primo = new Casella(elemento,primo,null);
+    	
         if (vuota())
             ultimo = primo;
         lunghezza++;
+        
+        if(lunghezza > 1)
+        	nodoIn(1).setPrecedente(primo);
     }
 
     // Inserisce un nuovo elemento nella lista in ultima posizione
@@ -55,19 +59,27 @@ class Tabellone {
         if (vuota())
             inserisciPrimo(elemento);
         else {
-            ultimo.setSuccessivo(new Casella(elemento,null));
+            ultimo.setSuccessivo(new Casella(elemento,null,ultimo));
             ultimo = ultimo.getSuccessivo();
             lunghezza++;
         }
     }
     
-    public void inserisci(int elemento, int posizione) {
-    	Casella nuovoNodo = new Casella(elemento);
+    public void inserisci(int elemento, int posizione, boolean imprevisto) {
+    	Casella nuovoNodo = new Casella(elemento, imprevisto);
     	Casella precedente = nodoIn(posizione-1);
     	Casella seguente = precedente.getSuccessivo();
         precedente.setSuccessivo(nuovoNodo);
-        nuovoNodo.setSuccessivo(seguente);
+        nuovoNodo.setSuccessivo(seguente);   
+        
+        nuovoNodo.setPrecedente(precedente);	// il precedente del nodo seguente e' il nuovo nodo
+        seguente.setPrecedente(nuovoNodo);
         lunghezza++;
+        
+    }
+    
+    public void inserisci(int elemento, int posizione) {
+    	this.inserisci(elemento, posizione, false);
     }
     
     public Casella nodoIn(int posizione) {
@@ -94,11 +106,11 @@ class Tabellone {
     
     public void cancella(int posizione) {
         // Cancella primo nodo
-        if(posizione==0) {
+        if(posizione == 0) {
             primo = primo.getSuccessivo();
         }
         // Cancella ultimo nodo
-        else if(posizione==lunghezza-1) {
+        else if(posizione == lunghezza - 1) {
         	Casella penultimo = nodoIn(lunghezza-2);
             penultimo = null;
             ultimo = penultimo;
@@ -108,10 +120,27 @@ class Tabellone {
         	Casella precedente = nodoIn(posizione-1);
         	Casella daEliminare = precedente.getSuccessivo();
             precedente.setSuccessivo(daEliminare.getSuccessivo());
+            
+            daEliminare.getSuccessivo().setPrecedente(precedente); // Il precedente del nodo successivo a quello cancellato diventa il nodo precedente a quello cancellato
         }
         lunghezza--;
     }
     
+    
+    /**
+     * Scambia gli elementi di due posizioni
+     * @param pos1
+     * @param pos2
+     */
+    public void swap(int pos1, int pos2) {
+    	Casella temp1 = nodoIn(pos1).clone();
+    	Casella temp2 = nodoIn(pos2).clone();
+    	cancella(pos1);
+    	this.inserisci(temp2.getElemento(), pos1, temp2.isImprevisto());
+    	    	  
+    	cancella(pos2);
+    	this.inserisci(temp1.getElemento(), pos2, temp1.isImprevisto());
+    }
     
     
 
