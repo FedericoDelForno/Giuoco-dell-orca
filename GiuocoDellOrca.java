@@ -89,6 +89,79 @@ public class GiuocoDellOrca {
 	 * Metodo per la partita
 	 */
 	public static void partita() {
-		
+		final int L_TABELLONE = 34;
+		int a[] = new int[L_TABELLONE];
+		for(int i = 0; i < L_TABELLONE; i++) {
+			a[i] = i;
+		}
+		Tabellone tabellone = new Tabellone(a);
+		stampaTabellone(tabellone);  // Riga di test
 	}
+	
+	/**
+	 * Metodo che stampa il tabellone sotto forma di serpentina
+	 * @param t
+	 */
+	public static void stampaTabellone(Tabellone t) {
+		final int LARGHEZZA_SERPENTINA = 6;
+		int altezzaTot = 0;
+		int c = t.getLunghezza();
+		// Calcola quanto sarebbe alto il tabellone se stampato a forma di serpentina dove tra ogni due righe c'e' uno spazio occupato solamente da una casella ad un estremo della figura
+		while(true) {
+			altezzaTot++;
+			c -= LARGHEZZA_SERPENTINA;
+			if(c <= 0) {
+				break;
+			}
+			altezzaTot++;
+			c -= 1;
+			if(c <= 0) {
+				break;
+			}
+		}
+		
+		boolean ultimaRigaDiCaselle = false;
+		for(int i = 0; i < (altezzaTot*2)+1; i++) {			
+			for(int j = 0; j < LARGHEZZA_SERPENTINA; j++) {
+				if(i % 2 == 0) {
+					System.out.print("+---+");
+				}
+				else if(i % 4 == 1 || (i % 8 == 3 && j == LARGHEZZA_SERPENTINA-1) || (i % 8 == 7 && j == 0)) {
+					stampaCas();
+				}
+				else {
+					System.out.print("     ");
+				}
+				
+				if(i >= (altezzaTot-1)*2) {
+					ultimaRigaDiCaselle = true;
+				}
+				if(ultimaRigaDiCaselle) {
+					System.out.println("");
+					while(j < LARGHEZZA_SERPENTINA) {
+						stampaCas();
+						System.out.println("");
+						System.out.print("+---+\n");						
+						j++;
+					}
+					break;
+				}
+			}
+			System.out.println("");
+			if(ultimaRigaDiCaselle) {
+				break;
+			}
+		}	
+	}
+	
+	public static void stampaCas(char c) {
+		System.out.print("| ");
+		System.out.print(c);
+		System.out.print(" |");
+	}
+	
+	public static void stampaCas() {
+		System.out.print("|   |");
+	}
+
 }
