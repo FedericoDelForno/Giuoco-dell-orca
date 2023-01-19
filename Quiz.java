@@ -21,15 +21,15 @@ public class Quiz {
         this.id = id;
         this.diffic = diffic;
         switch(diffic) {
-	        case facile: {
+	        case FACILE: {
 	        	punti = 10;
 	        	break;
 	        }
-	        case medio: {
+	        case MEDIO: {
 	        	punti = 30;
 	        	break;
 	        }
-	        case difficile: {
+	        case DIFFICILE: {
 	        	punti = 50;
 	        	break;
 	        }

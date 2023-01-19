@@ -4,7 +4,7 @@
  *
  */
 public enum Diffic {
-	facile,
-	medio,
-	difficile
+	FACILE,
+	MEDIO,
+	DIFFICILE
 }

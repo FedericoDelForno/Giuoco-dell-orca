@@ -1,3 +1,8 @@
+/**
+ * Classe Tabellone (edit della classe Lista)
+ * @author Del Forno Sinicco Federico
+ * @version 1.0
+ */
 class Tabellone {
     private Casella primo;      // riferimento al primo nodo della lista
     private Casella ultimo;     // riferimento all'ultimo nodo della lista

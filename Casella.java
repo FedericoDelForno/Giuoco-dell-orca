@@ -1,5 +1,12 @@
+/**
+ * Classe Casella (edit della classe Nodo)
+ * @author Del Forno Sinicco Federico
+ * @version 1.0
+ */
+
 class Casella {
-    private int elemento;
+    private int elemento;  // L'elemento e' il numero identificativo univoco
+    private String titolo; 
     private Casella successivo;
     private Casella precedente;
     private boolean imprevisto;
@@ -8,11 +15,24 @@ class Casella {
         this(0,null,null,false);
     }
 
-    public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto){
+    /**
+     * Versione completa del costruttore di casella. Possiede ogni parametro
+     * @param elemento
+     * @param successivo
+     * @param precedente
+     * @param imprevisto
+     * @param titolo
+     */
+    public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto, String titolo){
         this.elemento = elemento;
         this.successivo = successivo;
         this.precedente = precedente;
         this.imprevisto = imprevisto;
+        this.titolo = titolo;
+    }
+    
+    public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto){
+    	this(elemento, successivo, precedente, imprevisto, "");
     }
     
     public Casella(int elemento){
@@ -72,5 +92,19 @@ class Casella {
 	 */
 	public void setImprevisto(boolean imprevisto) {
 		this.imprevisto = imprevisto;
+	}
+
+	/**
+	 * @return il titolo
+	 */
+	public String getTitolo() {
+		return titolo;
+	}
+
+	/**
+	 * @param setta il titolo
+	 */
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
 	}
 }

@@ -50,6 +50,17 @@ public class Giocatore {
 		this.pos = pos;
 	}
 	
+	/**
+	 * Metodo per spostare la pedina del giocatore in avanti o indietro
+	 * @param n Quantita' di caselle di cui spostarsi
+	 */
+	public void movePos(int n) {
+		pos += n;
+		if(pos < 0) {
+			pos = 0;
+		}
+	}
+	
 	
 	
 	
