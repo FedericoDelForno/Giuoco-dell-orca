@@ -1,2 +1,3 @@
 # Giuoco-dell-orca
-io quando
+
+Del Forno, Fabi, Mian
