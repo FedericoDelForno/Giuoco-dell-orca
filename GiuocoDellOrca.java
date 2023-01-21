@@ -295,4 +295,40 @@ public class GiuocoDellOrca {
 		final int DADO_MAX = 6;
 		return (int)(Math.random() * (DADO_MAX) + DADO_MIN);
 	}
+	
+	public static void lotta(Giocatore g1, Giocatore g2) {
+		int w1 = 0;
+		int w2 = 0;
+		System.out.println("Inizia la lotta tra " + g1.getTitoloG() + " e " + g2.getTitoloG());
+		for(int i = 0; i < 3; i++) {
+			System.out.println("LANCIO NUMERO " + i);
+			System.out.println(g1.getTitoloG() + " Sta lanciando il dado...");
+			int d1 = lanciaDado();
+			System.out.println("E' uscito " + d1);
+			System.out.println(g2.getTitoloG() + " Sta lanciando il dado...");
+			int d2 = lanciaDado();
+			System.out.println("E' uscito " + d2);
+			if(d1 > d2) {
+				w1++;
+			}
+			else if(d1 < d2){
+				w2++;
+			}
+			else {
+				System.out.println("Pareggio, rifare!");
+				i--;
+			}
+			
+			if(w1 == 2) {
+				g1.addScore(g2.getScore());
+				g2.setScore(0);
+				return;
+			}
+			else if(w2 == 2){
+				g1.addScore(g2.getScore());
+				g2.setScore(0);
+				return;
+			}
+		}
+	}
 }

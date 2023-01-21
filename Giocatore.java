@@ -33,6 +33,10 @@ public class Giocatore {
 	public int getScore() {
 		return score;
 	}
+	
+	public void setScore(int x) {
+		score = x;
+	}
 
 	/**
 	 * Metodo che prende in entrata un valore e lo somma al punteggio del giocatore.
