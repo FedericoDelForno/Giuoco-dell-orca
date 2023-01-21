@@ -10,6 +10,8 @@ class Casella {
     private Casella successivo;
     private Casella precedente;
     private boolean imprevisto;
+    private TipoCasella tipoCasella;
+    private int param;  // Parametro (ad esempio se questa casella ti fa andare avanti, il parametro indica di quante caselle lo fa)
     
     public Casella(){
         this(0,null,null,false);
@@ -106,5 +108,21 @@ class Casella {
 	 */
 	public void setTitolo(String titolo) {
 		this.titolo = titolo;
+	}
+
+	
+	/**
+	 * @return il tipo della casella
+	 */
+	public TipoCasella getTipoCasella() {
+		return tipoCasella;
+	}
+
+	/**
+	 * @param tipoCasella the tipoCasella to set
+	 */
+	public void setTipoCasella(TipoCasella tipoCasella, int param) {
+		this.tipoCasella = tipoCasella;
+		this.param = param;
 	}
 }

@@ -89,21 +89,28 @@ public class GiuocoDellOrca {
 	 * Metodo per la partita
 	 */
 	public static void partita() {
-		final int L_TABELLONE = 34;
-		int a[] = new int[L_TABELLONE];
-		for(int i = 0; i < L_TABELLONE; i++) {
-			a[i] = i;
-		}
-		Tabellone tabellone = new Tabellone(a);
+		final int L_TABELLONE = 32;
+		Tabellone tabellone = initTabellone(L_TABELLONE);
 		stampaTabellone(tabellone);  // Riga di test
 	}
 	
 	/**
+	 * Metodo per inizializzare il tabellone
+	 */
+	public static Tabellone initTabellone(int lunghezza) {		
+		int a[] = new int[lunghezza];
+		for(int i = 0; i < lunghezza; i++) {
+			a[i] = i;
+		}
+		return new Tabellone(a);
+	}
+	
+	/**
 	 * Metodo che stampa il tabellone sotto forma di serpentina
-	 * @param t
+	 * @param t	Tabellone
 	 */
 	public static void stampaTabellone(Tabellone t) {
-		final int LARGHEZZA_SERPENTINA = 4;
+		final int LARGHEZZA_SERPENTINA = 6;
 		int altezzaTot = 0;
 		int c = t.getLunghezza();
 		// Calcola quanto sarebbe alto il tabellone se stampato a forma di serpentina dove tra ogni due righe c'e' uno spazio occupato solamente da una casella ad un estremo della figura
@@ -132,7 +139,7 @@ public class GiuocoDellOrca {
 				versoDestra = false;
 			}
 			
-			if(i % 2 == 1) {
+			if(i % 2 == 1 || ultimaRigaDiCaselle) {
 				casellaAttuale = primaCasellaRiga;  
 				/* Se hai appena finito di stampare i lati superiori delle caselle,
 				 * fai tornare il contatore della casella attuale a quello della
@@ -153,12 +160,20 @@ public class GiuocoDellOrca {
 			}
 					
 			for(int j = 0; j < LARGHEZZA_SERPENTINA; j++) {			
-				if(i % 2 == 0  || i % 4 == 1 || (i % 8 == 3 && j == LARGHEZZA_SERPENTINA-1) || (i % 8 == 7 && j == 0)) {					
-					if(i % 2 == 0) {
+				if(i % 2 == 0  || i % 4 == 1 || (i % 8 == 3 && j == LARGHEZZA_SERPENTINA-1) || (i % 8 == 7 && j == 0)) {						
+					if(casellaAttuale >= t.getLunghezza() && ultimaRigaDiCaselle) {
+						System.out.print("     ");
+					}
+					else if(i % 2 == 0) {
 						System.out.print("+---+");
 					}
 					else {
-						stampaCas((char)(casellaAttuale + 48));
+						if(giocatoreIn(casellaAttuale) != null) {
+							stampaCas(pedinaIn(casellaAttuale));  // Stampa la pedina che c'e' in una casella, se ce n'e' una
+						}
+						else {
+							stampaCas(t.nodoIn(casellaAttuale).getElemento());  // Stampa il numero della casella, se non c'e' nessuna pedina
+						}
 					}
 					
 					if(versoDestra || (i/2) % 4 != 2) {
@@ -168,29 +183,82 @@ public class GiuocoDellOrca {
 						casellaAttuale--;
 					}			
 				}
-				
 				else {
 					System.out.print("     ");
 				}
 				
 				if(i >= (altezzaTot-1)*2) {
 					ultimaRigaDiCaselle = true;
-				}
-				
+				}		
 			}
 			System.out.println("");
-			
 		}	
 	}
 	
+	/**
+	 * Stampa i bordi laterali di una casella. prende un carattere in input e lo stampa in mezzo
+	 * @param c 	carattere da stampare
+	 */
 	public static void stampaCas(char c) {
 		System.out.print("| ");
 		System.out.print(c);
 		System.out.print(" |");
 	}
-	
+	/**
+	 * Stampa i bordi laterali di una casella. prende un int in input e lo stampa in mezzo, adattandolo in base al numero di cifre
+	 * @param n 	intero da stampare
+	 */
+	public static void stampaCas(int n) {
+		System.out.print("|");
+		if(n < 10)
+			System.out.print(" ");
+		System.out.print(n);
+		if(n < 100)
+			System.out.print(" ");
+		System.out.print("|");
+	}
+	/**
+	 * Stampa i bordi laterali di una casella.
+	 */
 	public static void stampaCas() {
 		System.out.print("|   |");
 	}
 
+	/**
+	 * Ritorna il numero del giocatore in una certa posizione
+	 * @param pos
+	 * @return
+	 */
+	public static int numGiocatoreIn(int pos) {
+		for(int i = 0; i < MAX_PLAYERS; i++) {
+			if(giocatori[i].getPos() == pos) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	/**
+	 * Ritorna il carattere della pedina del giocatore in una certa posizione
+	 * @param pos
+	 * @return
+	 */
+	public static char pedinaIn(int pos) {
+		return giocatoreIn(pos).getPedina();
+	}
+	/**
+	 * Ritorna il giocatore in una certa posizione
+	 * @param pos
+	 * @return
+	 */
+	public static Giocatore giocatoreIn(int pos) {
+		for(int i = 0; i < MAX_PLAYERS; i++) {
+			if(giocatori[i] == null) {
+				return null;
+			}
+			if(giocatori[i].getPos() == pos) {
+				return giocatori[i];
+			}
+		}
+		return null;
+	}
 }
