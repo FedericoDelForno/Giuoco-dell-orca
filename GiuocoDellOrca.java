@@ -103,7 +103,7 @@ public class GiuocoDellOrca {
 	 * @param t
 	 */
 	public static void stampaTabellone(Tabellone t) {
-		final int LARGHEZZA_SERPENTINA = 6;
+		final int LARGHEZZA_SERPENTINA = 4;
 		int altezzaTot = 0;
 		int c = t.getLunghezza();
 		// Calcola quanto sarebbe alto il tabellone se stampato a forma di serpentina dove tra ogni due righe c'e' uno spazio occupato solamente da una casella ad un estremo della figura
@@ -121,14 +121,54 @@ public class GiuocoDellOrca {
 		}
 		
 		boolean ultimaRigaDiCaselle = false;
-		for(int i = 0; i < (altezzaTot*2)+1; i++) {			
-			for(int j = 0; j < LARGHEZZA_SERPENTINA; j++) {
-				if(i % 2 == 0) {
-					System.out.print("+---+");
+		boolean versoDestra = true;  // variabile che e' true quando il programma sta stampando le caselle in ordine crescente
+		int casellaAttuale = 0;  // Variabile che contiene il numero della casella sta stampando in un determinato momento
+		int primaCasellaRiga = 0;  // Numero della prima casella della riga
+		for(int i = 0; i < (altezzaTot*2)+1; i++) {					
+			if(i % 8 <= 3) {
+				versoDestra = true;
+			}
+			else {
+				versoDestra = false;
+			}
+			
+			if(i % 2 == 1) {
+				casellaAttuale = primaCasellaRiga;  
+				/* Se hai appena finito di stampare i lati superiori delle caselle,
+				 * fai tornare il contatore della casella attuale a quello della
+				 * prima casella della riga
+				*/
+			}
+			else if(i != 0 && versoDestra) {
+				primaCasellaRiga = casellaAttuale;
+			}
+			else if(!versoDestra) {
+				if((i/2) % 4 == 3) {
+					primaCasellaRiga++;
 				}
-				else if(i % 4 == 1 || (i % 8 == 3 && j == LARGHEZZA_SERPENTINA-1) || (i % 8 == 7 && j == 0)) {
-					stampaCas();
+				else {
+					primaCasellaRiga = casellaAttuale + LARGHEZZA_SERPENTINA-1;
 				}
+				casellaAttuale = primaCasellaRiga;
+			}
+					
+			for(int j = 0; j < LARGHEZZA_SERPENTINA; j++) {			
+				if(i % 2 == 0  || i % 4 == 1 || (i % 8 == 3 && j == LARGHEZZA_SERPENTINA-1) || (i % 8 == 7 && j == 0)) {					
+					if(i % 2 == 0) {
+						System.out.print("+---+");
+					}
+					else {
+						stampaCas((char)(casellaAttuale + 48));
+					}
+					
+					if(versoDestra || (i/2) % 4 != 2) {
+						casellaAttuale++;
+					}
+					else{
+						casellaAttuale--;
+					}			
+				}
+				
 				else {
 					System.out.print("     ");
 				}
@@ -136,21 +176,10 @@ public class GiuocoDellOrca {
 				if(i >= (altezzaTot-1)*2) {
 					ultimaRigaDiCaselle = true;
 				}
-				if(ultimaRigaDiCaselle) {
-					System.out.println("");
-					while(j < LARGHEZZA_SERPENTINA) {
-						stampaCas();
-						System.out.println("");
-						System.out.print("+---+\n");						
-						j++;
-					}
-					break;
-				}
+				
 			}
 			System.out.println("");
-			if(ultimaRigaDiCaselle) {
-				break;
-			}
+			
 		}	
 	}
 	
