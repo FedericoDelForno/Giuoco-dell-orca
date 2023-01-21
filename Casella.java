@@ -30,7 +30,7 @@ class Casella {
         this.successivo = successivo;
         this.precedente = precedente;
         this.imprevisto = imprevisto;
-        this.titolo = titolo;
+        this.titolo = titolo; 
     }
     
     public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto){
@@ -42,8 +42,7 @@ class Casella {
     }
     
     public Casella(int elemento, boolean imprevisto){
-        this.elemento = elemento;
-        this.imprevisto = imprevisto;
+    	this(elemento, null, null, imprevisto, "");
     }
     
     public Casella(int elemento, Casella successivo, Casella precedente){
@@ -52,7 +51,7 @@ class Casella {
 
     @Override
 	public Casella clone() {
-		Casella b = new Casella(elemento, successivo, precedente, imprevisto);
+		Casella b = new Casella(elemento, successivo, precedente, imprevisto, titolo);
     	return b;
 	}
 

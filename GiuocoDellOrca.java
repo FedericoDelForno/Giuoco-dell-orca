@@ -1,3 +1,4 @@
+import java.util.concurrent.TimeUnit;
 
 public class GiuocoDellOrca {
 	public static final int MIN_PLAYERS = 2;
@@ -82,16 +83,43 @@ public class GiuocoDellOrca {
 			giocatori[i] = new Giocatore(nome, pedina);
 		}
 		
-		partita();
+		partita(nPers);
 	}
 	
 	/**
 	 * Metodo per la partita
+	 * @param nGioc 	Numero di giocatori
 	 */
-	public static void partita() {
-		final int L_TABELLONE = 32;
+	public static void partita(int nGioc) {
+		final int L_TABELLONE = 15;
 		Tabellone tabellone = initTabellone(L_TABELLONE);
-		stampaTabellone(tabellone);  // Riga di test
+	
+		// Loop
+		int turno = 0;
+		while(true) {
+			stampaTabellone(tabellone);
+			do {	
+				System.out.println("Tocca a " + giocatori[turno].getTitoloG() + ", Scrivi 1 e poi premi invio per lanciare il dado\n");
+			}while(Leggi.unChar() != '1');
+			int risultDado = lanciaDado();
+			System.out.println("Sto lanciando il dado...");
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("E' uscito il numero " + risultDado);		
+			giocatori[turno].movePos(risultDado);
+			// Torna indietro se hai un numero troppo alto alla fine
+			if(giocatori[turno].getPos() >= L_TABELLONE) {
+				giocatori[turno].movePos(2 * ((L_TABELLONE-1) - giocatori[turno].getPos())); 
+			}
+						
+			turno++;  // Cambia turno
+			if(turno >= nGioc) {
+				turno = 0;
+			}
+		}
 	}
 	
 	/**
@@ -260,5 +288,11 @@ public class GiuocoDellOrca {
 			}
 		}
 		return null;
+	}
+	
+	public static int lanciaDado() {
+		final int DADO_MIN = 1;
+		final int DADO_MAX = 6;
+		return (int)(Math.random() * (DADO_MAX) + DADO_MIN);
 	}
 }
