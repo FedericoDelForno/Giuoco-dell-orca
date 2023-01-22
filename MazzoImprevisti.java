@@ -16,6 +16,16 @@ public class MazzoImprevisti {
     	prossimoImprevisto = 0;
     }
     
+    public String toString() {
+    	String s = "CIMA DEL MAZZO\n";
+    	for(int i = 0; i < imprevistiContenuti; i++) {
+    		s += i + ") ";
+    		s += imprevisti[i].toString();
+    		s += "\n";
+    	}
+    	s += "FONDO DEL MAZZO";
+    	return s;
+    }
     
     public boolean addImprevisto(Imprevisto imprevisto) {
         boolean res = false;
@@ -27,28 +37,30 @@ public class MazzoImprevisti {
         return res;
     }
     
-    public Imprevisto prossimoImprevisto() {
-    	Imprevisto q = imprevisti[prossimoImprevisto];
-        prossimoImprevisto++;
-        return q;
-    }
-    
     public boolean finito() {
         return prossimoImprevisto >= imprevisti.length;
     }
     
-    public void comprimi() {
-    	for(int i = imprevisti.length; i >= 0; i--) {
-    		if(imprevisti[i] != null) {
-    			int imprevistoPiuAlto;
-    			imprevistoPiuAlto = i;
-    			for(int j = imprevistoPiuAlto; j >= 0; j-- ) {
-    				if(imprevisti[j] == null) {
-    					imprevisti[j] = imprevisti[i];
-    					imprevisti[i] = null;
-    				}
-    			}
-    		}
+    public void mischia() {
+    	for(int i = 0; i < imprevistiContenuti; i++) {
+    		swap(i, (int)(Math.random() * imprevistiContenuti));
     	}
     }
+    
+    private void swap(int x, int y) {
+    	Imprevisto temp = imprevisti[x];
+    	imprevisti[x] = imprevisti[y];
+    	imprevisti[y] = temp;
+    }
+    
+    public Imprevisto pesca(Giocatore g) {
+    	Imprevisto q = imprevisti[prossimoImprevisto];
+        prossimoImprevisto++;
+        if(prossimoImprevisto >= imprevistiContenuti) {
+        	prossimoImprevisto = 0;
+        }
+        System.out.println(q.getDesc());
+        q.applicaImprevisto(g);
+        return q;
+    }    
 }

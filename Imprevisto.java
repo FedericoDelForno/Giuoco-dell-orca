@@ -34,24 +34,45 @@ public class Imprevisto {
 		this.parametro = parametro;
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return "desc= " + desc + ",    tipoImprevisto= " + tipoImprevisto + ", parametro= " + parametro 
+				+ ", tipoImprevisto2= " + tipoImprevisto2 + ", parametro2= " + parametro2;
+	}
+
 	/**
 	 * Applica effetti dell'imprevisto
-	 * @param g
+	 * @param g		Giocatore sul quale ha effetto l'imprevisto
 	 */
 	public void applicaImprevisto(Giocatore g){
-		switch(tipoImprevisto) {
-		case AGGIUNGI_PUNTI: {
-			g.addScore(parametro);
-			break;
-		}
-		case SALTA_CASELLE: {
-			g.movePos(parametro);
-			break;
-		}
-		case VAI_A_CASELLA: {
-			g.setPos(parametro);
-			break;
-		}
+		TipoImprevisto ti = tipoImprevisto;
+		int p = parametro;
+		for(int i = 0; i < 2; i++) {
+			switch(ti) {
+			case AGGIUNGI_PUNTI: {
+				g.addScore(p);
+				break;
+			}
+			case SET_PUNTI: {
+				g.setScore(p);
+				break;
+			}
+			case SALTA_CASELLE: {
+				g.movePos(p);
+				break;
+			}
+			case VAI_A_CASELLA: {
+				g.setPos(p);
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+			ti = tipoImprevisto2;
+			p = parametro2;
 		}
 	}
 

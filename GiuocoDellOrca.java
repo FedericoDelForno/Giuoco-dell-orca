@@ -13,21 +13,30 @@ public class GiuocoDellOrca {
 	 * Menu principale
 	 */
 	public static void mainMenu(){		
-		String s = "IL GIUOCO DELL' ORCA\n\n";
-		s += "1 - Gioca\n";
-		s += "2 - Esci\n";
-		System.out.println(s);
-		switch(Leggi.unInt()) {
-		case 1: {
-			playerMenu();
-			break;
-		}
-		case 2: {
-			return;
-		}
-		default: {
-			System.out.println("Input non valido");
-		}
+		while(true) {
+			String s = "IL GIUOCO DELL' ORCA\n\n";
+			s += "1 - Gioca\n";
+			s += "2 - Esci\n";
+			System.out.println(s);
+			switch(Leggi.unInt()) {
+			case 1: {
+				playerMenu();
+				break;
+			}
+			case 2: {
+				return;
+			}
+			case 0:{
+				// Debug mode
+				giocatori[0] = new Giocatore("@", '@');
+				giocatori[1] = new Giocatore("#", '#');
+				partita(2, true);
+				break;
+			}
+			default: {
+				System.out.println("Input non valido");
+			}
+			}
 		}
 	}	
 	
@@ -86,28 +95,38 @@ public class GiuocoDellOrca {
 		partita(nPers);
 	}
 	
+	public static void partita(int nGioc) {
+		partita(nGioc, false);
+	}
 	/**
 	 * Metodo per la partita
-	 * @param nGioc 	Numero di giocatori
+	 * @param nGioc 		Numero di giocatori
+	 * @param debugMode
 	 */
-	public static void partita(int nGioc) {
+	public static void partita(int nGioc, boolean debugMode) {
 		final int L_TABELLONE = 15;
 		Tabellone tabellone = initTabellone(L_TABELLONE);
 		MazzoImprevisti mazzoImprevisti = initMazzoImprevisti(tabellone);
-		
+		mazzoImprevisti.mischia();
+		if(debugMode) {
+			System.out.println(mazzoImprevisti.toString()); 
+		}
 		// Loop
 		int turno = 0;
 		while(true) {
 			stampaTabellone(tabellone);
-			do {	
-				System.out.println("Tocca a " + giocatori[turno].getTitoloG() + ", Scrivi 1 e poi premi invio per lanciare il dado\n");
-			}while(Leggi.unChar() != '1');
-			int risultDado = lanciaDado();
-			System.out.println("Sto lanciando il dado...");
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			int risultDado;
+			if(!debugMode) {
+				do {	
+					System.out.println("Tocca a " + giocatori[turno].getTitoloG() + ", Scrivi 1 e poi premi invio per lanciare il dado\n");
+				}while(Leggi.unChar() != '1');
+				risultDado = lanciaDado();
+				System.out.println("Sto lanciando il dado...");
+				delay(1000);
+			}
+			else {
+				System.out.println("Tocca a " + giocatori[turno].getTitoloG() + ", Che risultato avra' il lancio del dado?");
+				risultDado = Leggi.unInt();
 			}
 			System.out.println("E' uscito il numero " + risultDado);		
 			giocatori[turno].movePos(risultDado);
@@ -115,11 +134,31 @@ public class GiuocoDellOrca {
 			if(giocatori[turno].getPos() >= L_TABELLONE) {
 				giocatori[turno].movePos(2 * ((L_TABELLONE-1) - giocatori[turno].getPos())); 
 			}
-			
+			else if(giocatori[turno].getPos() == L_TABELLONE-1) {
+				if(giocatori[turno].getScore() > 0) {
+					System.out.println(giocatori[turno].getTitoloG() +" HA VINTO!");
+					return;
+				}
+				else {
+					System.out.println("Non hai abbastanza punti, Torna al VIA!");
+					giocatori[turno].setPos(0);
+				}
+			}
 			
 			// Attiva la lotta se due giocatori si incontrano su una casella che non e' la 0
 			if(giocatoreIn(giocatori[turno].getPos(), turno) != null && giocatori[turno].getPos() != 0) {
 				lotta(giocatori[turno], giocatoreIn(giocatori[turno].getPos(), turno));
+			}
+			while(giocatori[turno].getPos() != 0 && giocatoreIn(giocatori[turno].getPos(), turno) != null) {
+				giocatori[turno].movePos(-1);  // Indietreggia finche non raggiungi una casella senza giocatori
+			}
+			if(giocatori[turno].getPos() < 0) {
+				giocatori[turno].setPos(0);  // La casella 0 e' l'unico posto dove piu' giocatori possono stare insieme
+			}
+			
+			// Pesca Imprevisto (Non succede se hai appena lottato)
+			if(tabellone.nodoIn(giocatori[turno].getPos()).getTipoCasella() == TipoCasella.IMPREVISTO) {
+				mazzoImprevisti.pesca(giocatori[turno]);
 			}
 			
 			// Cambia turno
@@ -138,7 +177,11 @@ public class GiuocoDellOrca {
 		for(int i = 0; i < lunghezza; i++) {
 			a[i] = i;
 		}
-		return new Tabellone(a);
+		Tabellone t = new Tabellone(a);
+		for(int i = 5; i < lunghezza-1; i+=3) {
+			t.nodoIn(i).setTipoCasella(TipoCasella.IMPREVISTO, 0);
+		}
+		return t;
 	}
 	
 	public static MazzoImprevisti initMazzoImprevisti(Tabellone t){
@@ -146,15 +189,17 @@ public class GiuocoDellOrca {
 		MazzoImprevisti m = new MazzoImprevisti(L_MAZZO_IMPREVISTI);
 		m.addImprevisto(new Imprevisto("Torna al VIA", TipoImprevisto.VAI_A_CASELLA, 0));
 		m.addImprevisto(new Imprevisto("Per sbaglio inciampi su un sasso e tutti i punti che avevi ti escono dalla tasca", TipoImprevisto.SET_PUNTI, 0));
+		m.addImprevisto(new Imprevisto("Trovi una scorciatoia, Vai avanti di 3 caselle", TipoImprevisto.SALTA_CASELLE, 3));
 		m.addImprevisto(new Imprevisto("Trovi una scorciatoia, Vai avanti di 6 caselle", TipoImprevisto.SALTA_CASELLE, 6));
-		m.addImprevisto(new Imprevisto("Trovi una strada che sembra una scorciatoia, ci entri, poi ti accorgi che quella strada ti ha portato indietro di 10 caselle", TipoImprevisto.SALTA_CASELLE, -10));
+		m.addImprevisto(new Imprevisto("Trovi una scorciatoia, Vai avanti di 9 caselle", TipoImprevisto.SALTA_CASELLE, 9));
+		m.addImprevisto(new Imprevisto("Trovi una strada che sembra una scorciatoia, la percorri fino in fondo, ma poi ti accorgi che quella strada ti ha portato indietro di 15 caselle", TipoImprevisto.SALTA_CASELLE, -15));
 		//m.addImprevisto(new Imprevisto("Accidentalmente, calpesti un pulsante che fa partire un attacco nucleare contro la Calabria e fai esplodere Catanzaro. Il presidente della Nord Korea ti viene a trovare di persona, si congratula con te per l'incredibile attacco nucleare che nemmeno lui sarebbe riuscito a fare e ti regala 999 Punti", TipoImprevisto.AGGIUNGI_PUNTI, 999));
 		m.addImprevisto(new Imprevisto("Trovi 10 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 10));
 		m.addImprevisto(new Imprevisto("Trovi 30 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 30));
 		m.addImprevisto(new Imprevisto("Trovi 50 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 50));
 		m.addImprevisto(new Imprevisto("Trovi 69 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 69));
 		m.addImprevisto(new Imprevisto("Trovi 120 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 120));
-		m.addImprevisto(new Imprevisto("Trovi 1000 Punti per terra, e siccome sei una brava persona civile cerchi di rintracciare il proprietario per restituirli. Scherzo, te li tieni per te", TipoImprevisto.AGGIUNGI_PUNTI, 1000));
+		m.addImprevisto(new Imprevisto("Trovi 1000 Punti per terra, e siccome sei una brava persona civile cerchi di rintracciare il proprietario per restituirglieli. Scherzo, te li tieni per te", TipoImprevisto.AGGIUNGI_PUNTI, 1000));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 20 punti", TipoImprevisto.AGGIUNGI_PUNTI, -20));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 40 punti", TipoImprevisto.AGGIUNGI_PUNTI, -40));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 60 punti", TipoImprevisto.AGGIUNGI_PUNTI, -60));
@@ -228,6 +273,9 @@ public class GiuocoDellOrca {
 					else {
 						if(giocatoreIn(casellaAttuale) != null) {
 							stampaCas(pedinaIn(casellaAttuale));  // Stampa la pedina che c'e' in una casella, se ce n'e' una
+						}
+						else if(t.nodoIn(casellaAttuale).getTipoCasella() == TipoCasella.IMPREVISTO) {
+							stampaCas('!');
 						}
 						else {
 							stampaCas(t.nodoIn(casellaAttuale).getElemento());  // Stampa il numero della casella, se non c'e' nessuna pedina
@@ -320,13 +368,34 @@ public class GiuocoDellOrca {
 		return null;
 	}
 	/**
-	 * Ritorna il giocatore in una certa posizione
+	 * Ritorna il giocatore in una certa posizione. Ignora il giocatore specificato
 	 * @param pos
+	 * @param giocDaIgnorare 	Giocatore da ignorare
 	 * @return
 	 */
 	public static Giocatore giocatoreIn(int pos, int giocDaIgnorare) {
 		for(int i = 0; i < MAX_PLAYERS; i++) {
 			if(i == giocDaIgnorare) {
+				i++;
+			}
+			if(giocatori[i] == null) {
+				return null;
+			}
+			if(giocatori[i].getPos() == pos) {
+				return giocatori[i];
+			}
+		}
+		return null;
+	}
+	/**
+	 * Ritorna il giocatore in una certa posizione. Ignora il giocatore specificato
+	 * @param pos
+	 * @param giocDaIgnorare	Giocatore da ignorare
+	 * @return
+	 */
+	public static Giocatore giocatoreIn(int pos, Giocatore giocDaIgnorare) {
+		for(int i = 0; i < MAX_PLAYERS; i++) {
+			if(giocatori[i] == giocDaIgnorare) {
 				i++;
 			}
 			if(giocatori[i] == null) {
@@ -350,17 +419,24 @@ public class GiuocoDellOrca {
 		final int ROUND_DA_VINCERE = 2;
 		int w1 = 0;
 		int w2 = 0;
-		System.out.println("Inizia la lotta tra " + g1.getTitoloG() + " e " + g2.getTitoloG());
+		System.out.println("\n\n\nINIZIA LA LOTTA TRA " + g1.getTitoloG() + " e " + g2.getTitoloG() + ".\nVince il primo che ottiene il numero maggiore per due volte");
+		delay(3000);
 		Giocatore winner = new Giocatore("", ' ');
 		Giocatore loser = new Giocatore("", ' ');;
 		for(int i = 0; i < (ROUND_DA_VINCERE*2) - 1; i++) {
-			System.out.println("LANCIO NUMERO " + i);
+			delay(2000);
+			System.out.println("\nLANCIO NUMERO " + (i+1));
+			delay(2000);
 			System.out.println(g1.getTitoloG() + " Sta lanciando il dado...");
+			delay(1000);
 			int d1 = lanciaDado();
 			System.out.println("E' uscito " + d1);
+			delay(1500);
 			System.out.println(g2.getTitoloG() + " Sta lanciando il dado...");
+			delay(1000);
 			int d2 = lanciaDado();
 			System.out.println("E' uscito " + d2);
+			delay(800);
 			if(d1 > d2) {
 				w1++;
 			}
@@ -370,7 +446,9 @@ public class GiuocoDellOrca {
 			else {
 				System.out.println("Pareggio, rifare!");
 				i--;
+				continue;
 			}
+			System.out.println(g1.getTitoloG()+"  "+w1+" - "+w2+"  "+g2.getTitoloG());
 			
 			if(w1 == ROUND_DA_VINCERE) {
 				winner = g1;
@@ -384,14 +462,28 @@ public class GiuocoDellOrca {
 			}
 		}
 		
+		System.out.println(winner.getTitoloG() + " ha vinto la lotta");
 		winner.addScore(loser.getScore());
 		loser.setScore(0);
 		
-		while(giocatoreIn(loser.getPos()) != null) {
+		while(loser.getPos() != 0 && giocatoreIn(loser.getPos(), loser) != null) {
 			loser.movePos(-1);  // Indietreggia finche non raggiungi una casella senza giocatori
 		}
 		if(loser.getPos() < 0) {
 			loser.setPos(0);  // La casella 0 e' l'unico posto dove piu' giocatori possono stare insieme
-		}  
+		}
+		return;  
+	}
+	
+	/**
+	 * Metodo per fermare l'esecuzione del codice per x millisecondi
+	 * @param x		Numero di millisecondi
+	 */
+	public static void delay(int x) {
+		try {
+			TimeUnit.MILLISECONDS.sleep(x);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
