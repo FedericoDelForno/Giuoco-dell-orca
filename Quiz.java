@@ -56,6 +56,9 @@ public class Quiz {
 	public Diffic getDiffic() {
 		return diffic;
 	}
+	public int getPunti() {
+		return punti;
+	}
     
     
 }

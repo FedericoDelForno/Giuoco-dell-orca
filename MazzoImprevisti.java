@@ -37,10 +37,6 @@ public class MazzoImprevisti {
         return res;
     }
     
-    public boolean finito() {
-        return prossimoImprevisto >= imprevisti.length;
-    }
-    
     public void mischia() {
     	for(int i = 0; i < imprevistiContenuti; i++) {
     		swap(i, (int)(Math.random() * imprevistiContenuti));
@@ -59,7 +55,6 @@ public class MazzoImprevisti {
         if(prossimoImprevisto >= imprevistiContenuti) {
         	prossimoImprevisto = 0;
         }
-        System.out.println(q.getDesc());
         q.applicaImprevisto(g);
         return q;
     }    

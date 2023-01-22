@@ -71,6 +71,9 @@ public class Imprevisto {
 				break;
 			}
 			}
+			if(tipoImprevisto2 == null) {
+				break;
+			}
 			ti = tipoImprevisto2;
 			p = parametro2;
 		}

@@ -1,51 +1,80 @@
 
 public class Domandiere {
-    private Quiz[] domande;
-    private int domandeContenute;
-    private int prossimaDomanda;
+    private ListaDomande domandeFacile;
+    private ListaDomande domandeMedio;
+    private ListaDomande domandeDifficile;
     
     
     public Domandiere(int numDomande) {
-        domande = new Quiz[numDomande];
-        domandeContenute = 0;
-        prossimaDomanda = 0;
+        domandeFacile = new ListaDomande(numDomande);
+        domandeMedio = new ListaDomande(numDomande);
+        domandeDifficile = new ListaDomande(numDomande);
     }
     
-    public boolean aggiungiDomanda(Quiz domanda) {
-        boolean res = false;
-        if(domandeContenute < domande.length) {
-            domande[domandeContenute] = domanda;
-            domandeContenute++;
-            res = true;
-        }
-        return res;
-    }
-    
-    public Quiz prossimaDomanda() {
-        Quiz q = domande[prossimaDomanda];
-        prossimaDomanda++;
-        return q;
-    }
-    
-    public boolean finito() {
-        return prossimaDomanda >= domande.length;
+    public void addDomanda(Quiz domanda) {
+    	switch(domanda.getDiffic()) {
+    	case FACILE: {
+    		domandeFacile.addDomanda(domanda);
+    		break;
+    	}
+    	case MEDIO: {
+    		domandeMedio.addDomanda(domanda);
+    		break;
+    	}
+    	case DIFFICILE: {
+    		domandeDifficile.addDomanda(domanda);
+    		break;
+    	}
+    	default:{
+    		break;
+    	}
+    	}
     }
     
     /**
-     * Estrai la prossima domanda che ha la difficolta' inserita in input come parametro
+     * Estrai la prossima domanda di una certa difficolta'
      * @param diffic
      * @return
      */
-    public Quiz prossimaDomandaDiffic(Diffic x) {
-    	while(domande[prossimaDomanda].getDiffic() != x) {
-    		prossimaDomanda++;
-    		if(finito()) {
-    			prossimaDomanda = 0;  // Se la lista di domande finisce allora torna all'inizio
-    		}
+    public Quiz pescaDomanda(Diffic x) {
+    	switch(x) {
+    	case FACILE: {
+    		return domandeFacile.prossimaDomanda();
     	}
-    	Quiz q = domande[prossimaDomanda];
-    	return q;
+    	case MEDIO: {
+    		return domandeMedio.prossimaDomanda();   		
+    	}
+    	case DIFFICILE: {
+    		return domandeDifficile.prossimaDomanda();
+    	}
+    	default:{
+    		break;
+    	}
+    	}
+    	return null;
+    }    
+    /**
+     * Estrai una domanda di una difficolta' a caso
+     * @return
+     */
+    public Quiz pescaDomanda() {
+    	switch((int)Math.floor(Math.random()*3)) {
+    	case 0: {
+    		return pescaDomanda(Diffic.FACILE);
+    	}
+    	case 1: {
+    		return pescaDomanda(Diffic.MEDIO);
+    	}
+    	case 2: {
+    		return pescaDomanda(Diffic.DIFFICILE);
+    	}
+    	}
+    	return null;
     }
     
-    
+    public void mischiaTutto() {
+    	domandeFacile.mischia();
+    	domandeMedio.mischia();
+    	domandeDifficile.mischia();
+    }
 }

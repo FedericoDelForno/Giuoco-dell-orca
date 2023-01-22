@@ -14,6 +14,9 @@ public class GiuocoDellOrca {
 	 */
 	public static void mainMenu(){		
 		while(true) {
+			for(int i = 0; i < MAX_PLAYERS; i++) {
+				giocatori[i] = null;
+			}
 			String s = "IL GIUOCO DELL' ORCA\n\n";
 			s += "1 - Gioca\n";
 			s += "2 - Esci\n";
@@ -146,8 +149,10 @@ public class GiuocoDellOrca {
 			}
 			
 			// Attiva la lotta se due giocatori si incontrano su una casella che non e' la 0
+			boolean eventoFineTurno = false;  // Questa varabile e' falsa fino a quando non parte una lotta o qualcuno finisce su una casella speciale
 			if(giocatoreIn(giocatori[turno].getPos(), turno) != null && giocatori[turno].getPos() != 0) {
 				lotta(giocatori[turno], giocatoreIn(giocatori[turno].getPos(), turno));
+				eventoFineTurno = true;
 			}
 			while(giocatori[turno].getPos() != 0 && giocatoreIn(giocatori[turno].getPos(), turno) != null) {
 				giocatori[turno].movePos(-1);  // Indietreggia finche non raggiungi una casella senza giocatori
@@ -157,8 +162,13 @@ public class GiuocoDellOrca {
 			}
 			
 			// Pesca Imprevisto (Non succede se hai appena lottato)
-			if(tabellone.nodoIn(giocatori[turno].getPos()).getTipoCasella() == TipoCasella.IMPREVISTO) {
-				mazzoImprevisti.pesca(giocatori[turno]);
+			if(tabellone.nodoIn(giocatori[turno].getPos()).getTipoCasella() == TipoCasella.IMPREVISTO && !eventoFineTurno) {
+				System.out.println("Sei finito su una casella imprevisto...\n" + mazzoImprevisti.pesca(giocatori[turno]).getDesc());
+				eventoFineTurno = true;
+			}
+			// Domanda
+			if(!eventoFineTurno) {
+				
 			}
 			
 			// Cambia turno
@@ -195,15 +205,20 @@ public class GiuocoDellOrca {
 		m.addImprevisto(new Imprevisto("Trovi una strada che sembra una scorciatoia, la percorri fino in fondo, ma poi ti accorgi che quella strada ti ha portato indietro di 15 caselle", TipoImprevisto.SALTA_CASELLE, -15));
 		//m.addImprevisto(new Imprevisto("Accidentalmente, calpesti un pulsante che fa partire un attacco nucleare contro la Calabria e fai esplodere Catanzaro. Il presidente della Nord Korea ti viene a trovare di persona, si congratula con te per l'incredibile attacco nucleare che nemmeno lui sarebbe riuscito a fare e ti regala 999 Punti", TipoImprevisto.AGGIUNGI_PUNTI, 999));
 		m.addImprevisto(new Imprevisto("Trovi 10 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 10));
+		m.addImprevisto(new Imprevisto("Trovi 15 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 15));
+		m.addImprevisto(new Imprevisto("Trovi 20 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 20));
 		m.addImprevisto(new Imprevisto("Trovi 30 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 30));
 		m.addImprevisto(new Imprevisto("Trovi 50 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 50));
 		m.addImprevisto(new Imprevisto("Trovi 69 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 69));
 		m.addImprevisto(new Imprevisto("Trovi 120 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 120));
-		m.addImprevisto(new Imprevisto("Trovi 1000 Punti per terra, e siccome sei una brava persona civile cerchi di rintracciare il proprietario per restituirglieli. Scherzo, te li tieni per te", TipoImprevisto.AGGIUNGI_PUNTI, 1000));
+		m.addImprevisto(new Imprevisto("Trovi 500 Punti per terra, ma siccome sei un cittadino onesto cerchi di rintracciare il proprietario per restituirglieli. Scherzo, te li tieni per te", TipoImprevisto.AGGIUNGI_PUNTI, 500));
+		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 10 punti", TipoImprevisto.AGGIUNGI_PUNTI, -10));
+		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 15 punti", TipoImprevisto.AGGIUNGI_PUNTI, -15));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 20 punti", TipoImprevisto.AGGIUNGI_PUNTI, -20));
+		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 30 punti", TipoImprevisto.AGGIUNGI_PUNTI, -30));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 40 punti", TipoImprevisto.AGGIUNGI_PUNTI, -40));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 60 punti", TipoImprevisto.AGGIUNGI_PUNTI, -60));
-		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 180 punti", TipoImprevisto.AGGIUNGI_PUNTI, -180));
+		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 180 punti", TipoImprevisto.AGGIUNGI_PUNTI, -100));
 		m.addImprevisto(new Imprevisto("Un tassista ti offre un passaggio alla penultima casella, accetti, pero' poi ti chiede di pagarlo con tutti i punti che hai", TipoImprevisto.VAI_A_CASELLA, t.getLunghezza()-2, TipoImprevisto.SET_PUNTI, 0));
 		return m;
 	}
@@ -278,7 +293,8 @@ public class GiuocoDellOrca {
 							stampaCas('!');
 						}
 						else {
-							stampaCas(t.nodoIn(casellaAttuale).getElemento());  // Stampa il numero della casella, se non c'e' nessuna pedina
+							//stampaCas(t.nodoIn(casellaAttuale).getElemento());  // Stampa il numero della casella, se non c'e' nessuna pedina
+							stampaCas();  // Stampa casella vuota
 						}
 					}
 					
@@ -376,7 +392,7 @@ public class GiuocoDellOrca {
 	public static Giocatore giocatoreIn(int pos, int giocDaIgnorare) {
 		for(int i = 0; i < MAX_PLAYERS; i++) {
 			if(i == giocDaIgnorare) {
-				i++;
+				continue;
 			}
 			if(giocatori[i] == null) {
 				return null;
@@ -396,7 +412,7 @@ public class GiuocoDellOrca {
 	public static Giocatore giocatoreIn(int pos, Giocatore giocDaIgnorare) {
 		for(int i = 0; i < MAX_PLAYERS; i++) {
 			if(giocatori[i] == giocDaIgnorare) {
-				i++;
+				continue;
 			}
 			if(giocatori[i] == null) {
 				return null;
@@ -420,7 +436,7 @@ public class GiuocoDellOrca {
 		int w1 = 0;
 		int w2 = 0;
 		System.out.println("\n\n\nINIZIA LA LOTTA TRA " + g1.getTitoloG() + " e " + g2.getTitoloG() + ".\nVince il primo che ottiene il numero maggiore per due volte");
-		delay(3000);
+		delay(2000);
 		Giocatore winner = new Giocatore("", ' ');
 		Giocatore loser = new Giocatore("", ' ');;
 		for(int i = 0; i < (ROUND_DA_VINCERE*2) - 1; i++) {
