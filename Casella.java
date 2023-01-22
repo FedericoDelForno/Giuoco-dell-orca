@@ -6,12 +6,11 @@
 
 class Casella {
     private int elemento;  // L'elemento e' il numero identificativo univoco
-    private String titolo; 
     private Casella successivo;
     private Casella precedente;
-    private boolean imprevisto;
     private TipoCasella tipoCasella;
-    private int param;  // Parametro (ad esempio se questa casella ti fa andare avanti, il parametro indica di quante caselle lo fa)
+    private int param;  // Parametro 
+    private String titolo; 
     
     public Casella(){
         this(0,null,null,false);
@@ -19,18 +18,26 @@ class Casella {
 
     /**
      * Versione completa del costruttore di casella. Possiede ogni parametro
-     * @param elemento
-     * @param successivo
-     * @param precedente
-     * @param imprevisto
-     * @param titolo
+     * @param elemento			Numero univoco
+     * @param successivo		Casella succesiva
+     * @param precedente		Casella precedente
+     * @param tipoCasella 		Il tipo di casella (vedi l'omonimo ENUM)
+     * @param param				Se questa casella ti fa andare avanti, il parametro indica di quante caselle lo fa
+     * @param titolo			
      */
-    public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto, String titolo){
+    public Casella(int elemento, Casella successivo, Casella precedente, TipoCasella tipoCasella, int param, String titolo){
         this.elemento = elemento;
         this.successivo = successivo;
         this.precedente = precedente;
-        this.imprevisto = imprevisto;
+        this.tipoCasella = tipoCasella;
+        this.param = param;
         this.titolo = titolo; 
+    }
+    
+    public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto, String titolo){
+        this(elemento, successivo, precedente, TipoCasella.NORMALE, 0, titolo);
+        if(imprevisto)
+        	tipoCasella = TipoCasella.IMPREVISTO; 
     }
     
     public Casella(int elemento, Casella successivo, Casella precedente, boolean imprevisto){
@@ -51,7 +58,7 @@ class Casella {
 
     @Override
 	public Casella clone() {
-		Casella b = new Casella(elemento, successivo, precedente, imprevisto, titolo);
+		Casella b = new Casella(elemento, successivo, precedente, tipoCasella, param, titolo);
     	return b;
 	}
 
@@ -84,7 +91,10 @@ class Casella {
 	 * @return imprevisto
 	 */
 	public boolean isImprevisto() {
-		return imprevisto;
+		if(tipoCasella == TipoCasella.IMPREVISTO)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -92,7 +102,10 @@ class Casella {
 	 * @param imprevisto 		il valore da assegnare ad imprevisto
 	 */
 	public void setImprevisto(boolean imprevisto) {
-		this.imprevisto = imprevisto;
+		if(imprevisto)
+			tipoCasella = TipoCasella.IMPREVISTO;
+		else if(tipoCasella == TipoCasella.IMPREVISTO)
+			tipoCasella = TipoCasella.NORMALE;
 	}
 
 	/**
