@@ -11,6 +11,17 @@ public class Domandiere {
         domandeDifficile = new ListaDomande(numDomande);
     }
     
+    public String toString() {
+    	String s = "";
+    	s += "MAZZO DOMANDE FACILI: \n";
+    	s += domandeFacile.toString() +"\n\n";
+    	s += "MAZZO DOMANDE MEDIO: \n";
+    	s += domandeMedio.toString() +"\n\n";
+    	s += "MAZZO DOMANDE DIFFICILE: \n";
+    	s += domandeDifficile.toString() +"\n\n";
+    	return s;
+    }
+    
     public void addDomanda(Quiz domanda) {
     	switch(domanda.getDiffic()) {
     	case FACILE: {

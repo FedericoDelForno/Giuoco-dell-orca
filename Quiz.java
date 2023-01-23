@@ -55,6 +55,10 @@ public class Quiz {
 	    }
     }
     
+    public Quiz() {
+    	this.risposte = new String[4];
+    }
+    
     public boolean corretta(int inputUtente) {
         return inputUtente == rispostaCorretta;
     }
@@ -78,4 +82,75 @@ public class Quiz {
 	public int getPunti() {
 		return punti;
 	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param domanda the domanda to set
+	 */
+	public void setDomanda(String domanda) {
+		this.domanda = domanda;
+	}
+
+	/**
+	 * @param risposte the risposte to set
+	 */
+	public void setRisposte(String[] risposte) {
+		this.risposte = risposte;
+	}
+	
+	public void setRisposta(String risposta, int pos) {
+		risposte[pos] = risposta;
+	}
+
+	/**
+	 * @param rispostaCorretta the rispostaCorretta to set
+	 */
+	public void setRispostaCorretta(int rispostaCorretta) {
+		this.rispostaCorretta = rispostaCorretta;
+	}
+
+	/**
+	 * @param diffic the diffic to set
+	 */
+	public void setDiffic(Diffic diffic) {
+		this.diffic = diffic;
+	}
+	public void setDiffic(String s) {
+		switch(s) {
+		case "FACILE": {
+			this.setDiffic(Diffic.FACILE);
+			break;
+		}
+		case "MEDIO": {
+			this.setDiffic(Diffic.MEDIO);
+			break;
+		}
+		case "DIFFICILE": {
+			this.setDiffic(Diffic.DIFFICILE);
+			break;
+		}
+		default: {
+			this.setDiffic(Diffic.FACILE);
+			break;
+		}
+		}
+		
+	}
+	
+	/**
+	 * @param punti the punti to set
+	 */
+	public void setPunti(int punti) {
+		this.punti = punti;
+	}
+
+	
+	
+	
 }

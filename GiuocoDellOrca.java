@@ -108,13 +108,20 @@ public class GiuocoDellOrca {
 	public static void partita(int nGioc, boolean debugMode) {
 		final int L_TABELLONE = 32;
 		final int PUNTI_PER_VINCERE = 1;  // Punti che il giocatore deve possedere per vincere quando raggiunge la casella finale
+		final int L_LISTA_DOMANDE = 50;
+		
 		Tabellone tabellone = initTabellone(L_TABELLONE);
 		MazzoImprevisti mazzoImprevisti = initMazzoImprevisti(tabellone);
-		Domandiere domandiere = initDomandiere();
 		mazzoImprevisti.mischia();
+		Domandiere domandiere = new Domandiere(L_LISTA_DOMANDE);
+		
+		LeggiFileDomande.initDomandiere(domandiere);
 		if(debugMode) {
-			System.out.println(mazzoImprevisti.toString()); 
+			System.out.println(mazzoImprevisti.toString());
+			System.out.println("\n\n");
+			System.out.println(domandiere.toString());
 		}
+		
 		// Loop
 		int turno = 0;
 		while(true) {
@@ -283,16 +290,6 @@ public class GiuocoDellOrca {
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 180 punti", TipoImprevisto.AGGIUNGI_PUNTI, -100));
 		m.addImprevisto(new Imprevisto("Un tassista ti offre un passaggio alla penultima casella, accetti, pero' poi ti chiede di pagarlo con tutti i punti che hai", TipoImprevisto.VAI_A_CASELLA, t.getLunghezza()-2, TipoImprevisto.SET_PUNTI, 0));
 		return m;
-	}
-	
-	public static Domandiere initDomandiere() {
-		final int L_LISTA_DOMANDE = 50;
-		Domandiere d = new Domandiere(L_LISTA_DOMANDE);
-		// Questa parte di codice e' solo temporanea, verra' rimpiazzata con un codice che legge domande da file txt
-		d.addDomanda(new Quiz(0, "Quanto fa 77 + 33?", "100", "111", "110", "99", 2, Diffic.FACILE));
-		d.addDomanda(new Quiz(0, "A quanto equivale 1 pollice?", "2.49 cm", "2.45 cm", "2.32 cm", "2.54 cm", 3, Diffic.MEDIO));
-		d.addDomanda(new Quiz(0, "Quanto e' lungo l'equatore della Terra?", "39.467 km", "40.076 km", "39.764 km", "46.367 km", 1, Diffic.DIFFICILE));
-		return d;
 	}
 	
 	/**

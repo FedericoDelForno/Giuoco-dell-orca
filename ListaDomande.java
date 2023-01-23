@@ -10,7 +10,25 @@ public class ListaDomande {
         prossimaDomanda = 0;
     }
     
-    public boolean addDomanda(Quiz domanda) {
+    
+    
+    @Override
+	public String toString() {
+		String s = "";
+		s += "Domande contenute: " +domandeContenute+ "\n";
+		s += "Prossima domanda: " +prossimaDomanda+ "\n";
+		s += "CIMA DEL MAZZO\n";
+		for(int i = 0; i < domandeContenute; i++) {
+			s += i + ") ";
+			s += domande[i].toString() + "\n";
+		}
+		s += "FONDO DEL MAZZO\n";
+    	return s;
+	}
+
+
+
+	public boolean addDomanda(Quiz domanda) {
         boolean res = false;
         if(domandeContenute < domande.length) {
             domande[domandeContenute] = domanda;
