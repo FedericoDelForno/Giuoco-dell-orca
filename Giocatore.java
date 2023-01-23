@@ -45,6 +45,10 @@ public class Giocatore {
 	public void addScore(int addScore) {
 		score = score + addScore;
 	}
+	
+	public void halfScore() {
+		score /= 2;
+	}
 
 	public int getPos() {
 		return pos;

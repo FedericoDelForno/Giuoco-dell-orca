@@ -94,7 +94,6 @@ public class GiuocoDellOrca {
 			
 			giocatori[i] = new Giocatore(nome, pedina);
 		}
-		
 		partita(nPers);
 	}
 	
@@ -107,9 +106,11 @@ public class GiuocoDellOrca {
 	 * @param debugMode
 	 */
 	public static void partita(int nGioc, boolean debugMode) {
-		final int L_TABELLONE = 15;
+		final int L_TABELLONE = 32;
+		final int PUNTI_PER_VINCERE = 1;  // Punti che il giocatore deve possedere per vincere quando raggiunge la casella finale
 		Tabellone tabellone = initTabellone(L_TABELLONE);
 		MazzoImprevisti mazzoImprevisti = initMazzoImprevisti(tabellone);
+		Domandiere domandiere = initDomandiere();
 		mazzoImprevisti.mischia();
 		if(debugMode) {
 			System.out.println(mazzoImprevisti.toString()); 
@@ -117,6 +118,7 @@ public class GiuocoDellOrca {
 		// Loop
 		int turno = 0;
 		while(true) {
+			stampaScoreboard();
 			stampaTabellone(tabellone);
 			int risultDado;
 			if(!debugMode) {
@@ -138,7 +140,8 @@ public class GiuocoDellOrca {
 				giocatori[turno].movePos(2 * ((L_TABELLONE-1) - giocatori[turno].getPos())); 
 			}
 			else if(giocatori[turno].getPos() == L_TABELLONE-1) {
-				if(giocatori[turno].getScore() > 0) {
+				// Vittoria
+				if(giocatori[turno].getScore() >= PUNTI_PER_VINCERE) {
 					System.out.println(giocatori[turno].getTitoloG() +" HA VINTO!");
 					return;
 				}
@@ -147,6 +150,9 @@ public class GiuocoDellOrca {
 					giocatori[turno].setPos(0);
 				}
 			}
+			stampaScoreboard();
+			stampaTabellone(tabellone);
+			delay(1200);
 			
 			// Attiva la lotta se due giocatori si incontrano su una casella che non e' la 0
 			boolean eventoFineTurno = false;  // Questa varabile e' falsa fino a quando non parte una lotta o qualcuno finisce su una casella speciale
@@ -166,9 +172,65 @@ public class GiuocoDellOrca {
 				System.out.println("Sei finito su una casella imprevisto...\n" + mazzoImprevisti.pesca(giocatori[turno]).getDesc());
 				eventoFineTurno = true;
 			}
-			// Domanda
+			// Domanda (Non ti viene fatta se hai appena lottato o pescato un imprevisto)
 			if(!eventoFineTurno) {
-				
+				Quiz q = domandiere.pescaDomanda();
+				System.out.println(q);
+				char risp;
+				int rispInt = 0;
+				do {
+					risp = Leggi.unChar();
+					if(((int)risp) >= 41 && ((int)risp) <= 44) {
+						rispInt = ((int)risp) - 41;
+					}
+					else if (((int)risp) >= 97 && ((int)risp) <= 100) {
+						rispInt = ((int)risp) - 97;
+					}
+					else {
+						System.out.println("Input non valido");
+						continue;
+					}
+					break;
+				}while(true);
+				if(q.corretta(rispInt)) {
+					giocatori[turno].addScore(q.getPunti());  // Aumenta punti
+					System.out.println("\n\nRisposta giusta, ottieni " +q.getPunti()+ " punti");
+					delay(1000);
+					stampaScoreboard();
+					stampaTabellone(tabellone, true);
+					System.out.println("\nScegli una casella da spostare, scrivi in input il suo numero (Non puo' essere la casella iniziale o finale)");
+					int casellaDaSpostare;		// ID della casella da scegliere
+					int posCasellaDaSpostare = 0;	// Posizione della casella da scegliere
+					do {
+						casellaDaSpostare = Leggi.unInt();
+						if(casellaDaSpostare > 0 && casellaDaSpostare < (L_TABELLONE-1)) {
+							break;
+						}
+						System.out.println("Input non valido");
+					} while(true);
+					System.out.println("Sto lanciando il dado...");
+					delay(1000);
+					int d = lanciaDado();
+					System.out.println("E' uscito " +d+ " La casella e' stata scambiata con un'altra distante" +d+ " caselle");
+					for(int i = 1; i < L_TABELLONE; i++) {
+						if(tabellone.nodoIn(i).getElemento() == casellaDaSpostare) {
+							posCasellaDaSpostare = i;
+							break;
+						}
+					}
+					if(posCasellaDaSpostare + d < (L_TABELLONE-1)) {
+						tabellone.swap(posCasellaDaSpostare, posCasellaDaSpostare+d);
+					}
+					else {
+						tabellone.swap(posCasellaDaSpostare, L_TABELLONE-2);
+					}
+					stampaTabellone(tabellone, true);
+					delay(1800);
+				}
+				else {
+					giocatori[turno].halfScore();
+					System.out.println("Risposta sbagliata, punteggio dimezzato");
+				}
 			}
 			
 			// Cambia turno
@@ -223,11 +285,24 @@ public class GiuocoDellOrca {
 		return m;
 	}
 	
+	public static Domandiere initDomandiere() {
+		final int L_LISTA_DOMANDE = 50;
+		Domandiere d = new Domandiere(L_LISTA_DOMANDE);
+		// Questa parte di codice e' solo temporanea, verra' rimpiazzata con un codice che legge domande da file txt
+		d.addDomanda(new Quiz(0, "Quanto fa 77 + 33?", "100", "111", "110", "99", 2, Diffic.FACILE));
+		d.addDomanda(new Quiz(0, "A quanto equivale 1 pollice?", "2.49 cm", "2.45 cm", "2.32 cm", "2.54 cm", 3, Diffic.MEDIO));
+		d.addDomanda(new Quiz(0, "Quanto e' lungo l'equatore della Terra?", "39.467 km", "40.076 km", "39.764 km", "46.367 km", 1, Diffic.DIFFICILE));
+		return d;
+	}
+	
 	/**
 	 * Metodo che stampa il tabellone sotto forma di serpentina
 	 * @param t	Tabellone
 	 */
 	public static void stampaTabellone(Tabellone t) {
+		stampaTabellone(t, false);
+	}
+	public static void stampaTabellone(Tabellone t, boolean MostraNumeriCaselle) {
 		final int LARGHEZZA_SERPENTINA = 6;
 		int altezzaTot = 0;
 		int c = t.getLunghezza();
@@ -289,12 +364,14 @@ public class GiuocoDellOrca {
 						if(giocatoreIn(casellaAttuale) != null) {
 							stampaCas(pedinaIn(casellaAttuale));  // Stampa la pedina che c'e' in una casella, se ce n'e' una
 						}
-						else if(t.nodoIn(casellaAttuale).getTipoCasella() == TipoCasella.IMPREVISTO) {
+						else if(t.nodoIn(casellaAttuale).getTipoCasella() == TipoCasella.IMPREVISTO && !MostraNumeriCaselle) {
 							stampaCas('!');
 						}
 						else {
-							//stampaCas(t.nodoIn(casellaAttuale).getElemento());  // Stampa il numero della casella, se non c'e' nessuna pedina
-							stampaCas();  // Stampa casella vuota
+							if(MostraNumeriCaselle)
+								stampaCas(t.nodoIn(casellaAttuale).getElemento(), t.nodoIn(casellaAttuale).isImprevisto());  // Stampa il numero della casella, se non c'e' nessuna pedina
+							else
+								stampaCas();  // Stampa casella vuota
 						}
 					}
 					
@@ -318,6 +395,25 @@ public class GiuocoDellOrca {
 	}
 	
 	/**
+	 * Stampa la scoreboard
+	 */
+	public static void stampaScoreboard() {
+		for(int i = 0; i < 20; i++)
+			System.out.print("--");
+		System.out.print("\n");
+		System.out.println("SCORE");
+		for(int i = 0; i < MAX_PLAYERS; i++) {
+			if(giocatori[i] == null) {
+				break;
+			}
+			System.out.println(giocatori[i].getTitoloG()+ " " +giocatori[i].getScore() );
+		}
+		for(int i = 0; i < 20; i++)
+			System.out.print("--");
+		System.out.print("\n");
+	}
+	
+	/**
 	 * Stampa i bordi laterali di una casella. prende un carattere in input e lo stampa in mezzo
 	 * @param c 	carattere da stampare
 	 */
@@ -338,6 +434,20 @@ public class GiuocoDellOrca {
 		if(n < 100)
 			System.out.print(" ");
 		System.out.print("|");
+	}
+	public static void stampaCas(int n, boolean imp) {
+		if(imp) {
+			System.out.print("!");
+			if(n < 10)
+				System.out.print(" ");
+			System.out.print(n);
+			if(n < 100)
+				System.out.print(" ");
+			System.out.print("!");
+		}
+		else {
+			stampaCas(n);
+		}
 	}
 	/**
 	 * Stampa i bordi laterali di una casella.
