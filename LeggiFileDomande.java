@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;  
 import java.util.Scanner; 
 
-public class LeggiFileDomande {
+public class LeggiFile {
 	public static void initDomandiere(Domandiere domandiere) {
 		try {
 		    File myObj = new File("domande.txt");
