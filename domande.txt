@@ -1,3 +1,6 @@
 Quanto fa 77 + 33?; 100; 111; 110; 99; 2; FACILE
+Quanto fa 2 + 2?; 2; 3; 4; 5; 2; FACILE
+A quanto corrisponde il numero romano XL?; 40; 60; 110; 210; 0; FACILE
+Qual'e' la capitale dell'Italia?; Napoli; Catanzaro; Palermo; Roma; 3; FACILE 
 A quanti cm corrisponde un pollice?; 2.45; 2.54; 2.32; 2.51; 1; MEDIO
 Quanto e' lungo l'equatore della Terra?; 39.467 km; 40.076 km; 39.764 km; 46.367 km; 1; DIFFICILE
