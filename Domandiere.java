@@ -83,9 +83,13 @@ public class Domandiere {
     	return null;
     }
     
+    /**
+     * Metodo per mischiare
+     */
     public void mischiaTutto() {
     	domandeFacile.mischia();
     	domandeMedio.mischia();
     	domandeDifficile.mischia();
+    	
     }
 }
