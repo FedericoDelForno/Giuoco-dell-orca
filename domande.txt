@@ -5,3 +5,12 @@ Qual'e' la capitale dell'Italia?; Napoli; Catanzaro; Palermo; Roma; 3; FACILE
 A quanti cm corrisponde un pollice?; 2.45; 2.54; 2.32; 2.51; 1; MEDIO
 Quanto e' lungo l'equatore della Terra?; 39.467 km; 40.076 km; 39.764 km; 46.367 km; 1; DIFFICILE
 Quando è iniziata la prima guerra mondiale?; 1918; 1914; 1925; 1912; 1; FACILE
+Qual'è la capitale della Germania?; Bonn; Colonia; Hannover; Berlino; 3; FACILE
+Qual'è la capitale dell'Olanda?; Rotterdam; Aia; Utrecht; Amsterdam; 3 FACILE
+Dov'è il Pantheon?; Parigi; Atene; New York; Roma; 3; FACILE
+Delle 3 fiere, quale peccato rappresenta la lupa?; L'avidità; La lussuria; La superbia; la gola; 0; MEDIO
+Dove si trova la via della seta?; Indonesia; Vietnam; Cina; Giappone; 2; MEDIO
+Cos'è l'ukulele?; un frutto; un animale; un alimento; uno strumento musicale; 3; MEDIO
+Qual'è la capitale della Giordania?; Amman; Aqaba; Ajlun; Madaba; 0; DIFFICILE
+Qual'è la capitale di Cuba?; Trinadad; Santa Clara; Varadero; L'Avana; 3; DIFFICILE
+qual'è la capitale del Zimbabwe?; Remare; Barabre; Pregare; Harare; 3; DIFFICILE
