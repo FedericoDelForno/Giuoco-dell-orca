@@ -275,12 +275,11 @@ public class GiuocoDellOrca {
 		final int L_MAZZO_IMPREVISTI = 50;
 		MazzoImprevisti m = new MazzoImprevisti(L_MAZZO_IMPREVISTI);
 		m.addImprevisto(new Imprevisto("Torna al VIA", TipoImprevisto.VAI_A_CASELLA, 0));
-		m.addImprevisto(new Imprevisto("Per sbaglio inciampi su un sasso e tutti i punti che avevi ti escono dalla tasca", TipoImprevisto.SET_PUNTI, 0));
+		m.addImprevisto(new Imprevisto("Per sbaglio inciampi su un sasso e tutti i punti che avevi ti escono dalle tasche", TipoImprevisto.SET_PUNTI, 0));
 		m.addImprevisto(new Imprevisto("Trovi una scorciatoia, Vai avanti di 3 caselle", TipoImprevisto.SALTA_CASELLE, 3));
 		m.addImprevisto(new Imprevisto("Trovi una scorciatoia, Vai avanti di 6 caselle", TipoImprevisto.SALTA_CASELLE, 6));
 		m.addImprevisto(new Imprevisto("Trovi una scorciatoia, Vai avanti di 9 caselle", TipoImprevisto.SALTA_CASELLE, 9));
 		m.addImprevisto(new Imprevisto("Trovi una strada che sembra una scorciatoia, la percorri fino in fondo, ma poi ti accorgi che quella strada ti ha portato indietro di 15 caselle", TipoImprevisto.SALTA_CASELLE, -15));
-		//m.addImprevisto(new Imprevisto("Accidentalmente, calpesti un pulsante che fa partire un attacco nucleare contro la Calabria e fai esplodere Catanzaro. Il presidente della Nord Korea ti viene a trovare di persona, si congratula con te per l'incredibile attacco nucleare che nemmeno lui sarebbe riuscito a fare e ti regala 999 Punti", TipoImprevisto.AGGIUNGI_PUNTI, 999));
 		m.addImprevisto(new Imprevisto("Trovi 10 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 10));
 		m.addImprevisto(new Imprevisto("Trovi 15 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 15));
 		m.addImprevisto(new Imprevisto("Trovi 20 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 20));
@@ -288,7 +287,6 @@ public class GiuocoDellOrca {
 		m.addImprevisto(new Imprevisto("Trovi 50 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 50));
 		m.addImprevisto(new Imprevisto("Trovi 69 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 69));
 		m.addImprevisto(new Imprevisto("Trovi 120 Punti per terra, li prendi", TipoImprevisto.AGGIUNGI_PUNTI, 120));
-		m.addImprevisto(new Imprevisto("Trovi 500 Punti per terra, ma siccome sei un cittadino onesto cerchi di rintracciare il proprietario per restituirglieli. Scherzo, te li tieni per te", TipoImprevisto.AGGIUNGI_PUNTI, 500));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 10 punti", TipoImprevisto.AGGIUNGI_PUNTI, -10));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 15 punti", TipoImprevisto.AGGIUNGI_PUNTI, -15));
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 20 punti", TipoImprevisto.AGGIUNGI_PUNTI, -20));
