@@ -2,15 +2,32 @@ Quanto fa 77 + 33?; 100; 111; 110; 99; 2; FACILE
 Quanto fa 2 + 2?; 2; 3; 4; 5; 2; FACILE
 A quanto corrisponde il numero romano XL?; 40; 60; 110; 210; 0; FACILE
 Qual'e' la capitale dell'Italia?; Napoli; Catanzaro; Palermo; Roma; 3; FACILE 
-A quanti cm corrisponde un pollice?; 2.45; 2.54; 2.32; 2.51; 1; MEDIO
-Quanto e' lungo l'equatore della Terra?; 39.467 km; 40.076 km; 39.764 km; 46.367 km; 1; DIFFICILE
 Quando è iniziata la prima guerra mondiale?; 1918; 1914; 1925; 1912; 1; FACILE
 Qual'è la capitale della Germania?; Bonn; Colonia; Hannover; Berlino; 3; FACILE
 Qual'è la capitale dell'Olanda?; Rotterdam; Aia; Utrecht; Amsterdam; 3 FACILE
 Dov'è il Pantheon?; Parigi; Atene; New York; Roma; 3; FACILE
+Dove si trova il Muro del Pianto?; Istanbul; Israele; Giza; Gerusalemme; 3; FACILE
+Chi è il traghettatore di anime?; minosse; caronte; cerbero; kratos; 1; FACILE
+Qual'è la capitale della Germania?; Bonn; Colonia; Hannover; Berlino; 3; FACILE
+Qual'è la capitale dell'Olanda?; Rotterdam; Aia; Utrecht; Amsterdam; 3; FACILE
+Dov'è il Pantheon?; Parigi; Atene; New York; Roma; 3; FACILE
+Quando è finita la Seconda Guerra Mondiale?; 1945; 1944; 1946; 1947; 0; FACILE
+Qual è la lingua più parlata al mondo?; Inglese; Spagnolo; Francese; Cinese; 3; FACILE
+
+Quando è stata scritta la Divina Commedia?; 1400; 1500; 1300; 1600; 2 MEDIO
+Dove si trova l'ufficio di Sherlock Holmes a Londra?; Portobello's Road; Caranby Street; Oxford Street; 221b Baker Street; 3; MEDIO 
 Delle 3 fiere, quale peccato rappresenta la lupa?; L'avidità; La lussuria; La superbia; la gola; 0; MEDIO
 Dove si trova la via della seta?; Indonesia; Vietnam; Cina; Giappone; 2; MEDIO
 Cos'è l'ukulele?; un frutto; un animale; un alimento; uno strumento musicale; 3; MEDIO
+Dove è nato il pittore Gustav Klimt?; Germania; Austria; Repubblica Ceca; Olanda; 1; MEDIO
+Qual è il quarto pianeta del sistema solare?; Terra; Marte; Giove; Nettuno; 2; MEDIO
+A quanti cm corrisponde un pollice?; 2.45; 2.54; 2.32; 2.51; 1; MEDIO
+
+Dove è stata fatta la Statua della Libertà?; Stati Uniti; Lenin; Parigi; New York; 2; DIFFICILE
+Qual'è la capitale del Qatar?; Lusail; Abu Dhabi; Doha; Skatar; 2; DIFFICILE
 Qual'è la capitale della Giordania?; Amman; Aqaba; Ajlun; Madaba; 0; DIFFICILE
 Qual'è la capitale di Cuba?; Trinadad; Santa Clara; Varadero; L'Avana; 3; DIFFICILE
-qual'è la capitale del Zimbabwe?; Remare; Barabre; Pregare; Harare; 3; DIFFICILE
+Qual'è la capitale del Zimbabwe?; Remare; Barabre; Pregare; Harare; 3; DIFFICILE
+Chi ha segnato più gol nella storia della Coppa del Mondo?; Ronaldo il Fenomeno; Miroslav Klose; Gerd Muller; Pelè; 1; DIFFICILE
+Qual'è la capitale dell'Uruguay?; Montevideo; Salto; Las Piedras; Carmelo; 0; DIFFICILE
+Quanto e' lungo l'equatore della Terra?; 39.467 km; 40.076 km; 39.764 km; 46.367 km; 1; DIFFICILE
