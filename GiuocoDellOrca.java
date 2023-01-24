@@ -20,6 +20,7 @@ public class GiuocoDellOrca {
 			String s = "IL GIUOCO DELL' ORCA\n\n";
 			s += "1 - Gioca\n";
 			s += "2 - Esci\n";
+			s += "\n\n(Inserisci 0 per la debug mode)\n";
 			System.out.println(s);
 			switch(Leggi.unInt()) {
 			case 1: {
@@ -81,7 +82,7 @@ public class GiuocoDellOrca {
 				inputValido = true;
 				pedina = Leggi.unChar();				
 				for(int j = 0; j < pedineDisponibili.length; j++) {
-					if(pedineDisponibili[j] == pedina) {
+					if(pedineDisponibili[j] == pedina && pedina != '.') {
 						pedineDisponibili[j] = '.';  // Sostituisce la pedina rimossa con un punto, che non verra' stampato la prossima volta che l'array delle pedine disponibili verra' mostrato
 						break;
 					}
@@ -125,6 +126,7 @@ public class GiuocoDellOrca {
 		// Loop
 		int turno = 0;
 		while(true) {
+			cls();
 			stampaScoreboard();
 			stampaTabellone(tabellone);
 			int risultDado;
@@ -140,6 +142,7 @@ public class GiuocoDellOrca {
 				System.out.println("Tocca a " + giocatori[turno].getTitoloG() + ", Che risultato avra' il lancio del dado?");
 				risultDado = Leggi.unInt();
 			}
+			cls();
 			System.out.println("E' uscito il numero " + risultDado);		
 			giocatori[turno].movePos(risultDado);
 			// Torna indietro se hai un numero troppo alto alla fine
@@ -176,7 +179,9 @@ public class GiuocoDellOrca {
 			
 			// Pesca Imprevisto (Non succede se hai appena lottato)
 			if(tabellone.nodoIn(giocatori[turno].getPos()).getTipoCasella() == TipoCasella.IMPREVISTO && !eventoFineTurno) {
-				System.out.println("Sei finito su una casella imprevisto...\n" + mazzoImprevisti.pesca(giocatori[turno]).getDesc());
+				System.out.println("Sei finito su una casella imprevisto...\n" + mazzoImprevisti.pesca(giocatori[turno]).getDesc()+ "\n\nScrivi qualcosa per continuare");
+				Leggi.unChar();
+				
 				eventoFineTurno = true;
 			}
 			// Domanda (Non ti viene fatta se hai appena lottato o pescato un imprevisto)
@@ -187,8 +192,8 @@ public class GiuocoDellOrca {
 				int rispInt = 0;
 				do {
 					risp = Leggi.unChar();
-					if(((int)risp) >= 41 && ((int)risp) <= 44) {
-						rispInt = ((int)risp) - 41;
+					if(((int)risp) >= 65 && ((int)risp) <= 68) {
+						rispInt = ((int)risp) - 65;
 					}
 					else if (((int)risp) >= 97 && ((int)risp) <= 100) {
 						rispInt = ((int)risp) - 97;
@@ -203,6 +208,7 @@ public class GiuocoDellOrca {
 					giocatori[turno].addScore(q.getPunti());  // Aumenta punti
 					System.out.println("\n\nRisposta giusta, ottieni " +q.getPunti()+ " punti");
 					delay(1000);
+					cls();
 					stampaScoreboard();
 					stampaTabellone(tabellone, true);
 					System.out.println("\nScegli una casella da spostare, scrivi in input il suo numero (Non puo' essere la casella iniziale o finale)");
@@ -217,6 +223,7 @@ public class GiuocoDellOrca {
 					} while(true);
 					System.out.println("Sto lanciando il dado...");
 					delay(1000);
+					cls();
 					int d = lanciaDado();
 					System.out.println("E' uscito " +d+ " La casella e' stata scambiata con un'altra distante" +d+ " caselle");
 					for(int i = 1; i < L_TABELLONE; i++) {
@@ -232,11 +239,12 @@ public class GiuocoDellOrca {
 						tabellone.swap(posCasellaDaSpostare, L_TABELLONE-2);
 					}
 					stampaTabellone(tabellone, true);
-					delay(1800);
+					delay(3800);
 				}
 				else {
 					giocatori[turno].halfScore();
 					System.out.println("Risposta sbagliata, punteggio dimezzato");
+					delay(1200);
 				}
 			}
 			
@@ -290,6 +298,14 @@ public class GiuocoDellOrca {
 		m.addImprevisto(new Imprevisto("Ti inciampi e fai cadere 180 punti", TipoImprevisto.AGGIUNGI_PUNTI, -100));
 		m.addImprevisto(new Imprevisto("Un tassista ti offre un passaggio alla penultima casella, accetti, pero' poi ti chiede di pagarlo con tutti i punti che hai", TipoImprevisto.VAI_A_CASELLA, t.getLunghezza()-2, TipoImprevisto.SET_PUNTI, 0));
 		return m;
+	}
+	
+	/**
+	 * """Pulisci""" schermo
+	 */
+	public static void cls() {
+		for(int i = 0; i < 50; i++)
+			System.out.println("\n\n");
 	}
 	
 	/**
