@@ -184,70 +184,70 @@ public class GiuocoDellOrca {
 				
 				eventoFineTurno = true;
 			}
-			// Domanda (Non ti viene fatta se hai appena lottato o pescato un imprevisto)
-			if(!eventoFineTurno) {
-				Quiz q = domandiere.pescaDomanda();
-				System.out.println(q);
-				char risp;
-				int rispInt = 0;
-				do {
-					risp = Leggi.unChar();
-					if(((int)risp) >= 65 && ((int)risp) <= 68) {
-						rispInt = ((int)risp) - 65;
-					}
-					else if (((int)risp) >= 97 && ((int)risp) <= 100) {
-						rispInt = ((int)risp) - 97;
-					}
-					else {
-						System.out.println("Input non valido");
-						continue;
-					}
-					break;
-				}while(true);
-				if(q.corretta(rispInt)) {
-					giocatori[turno].addScore(q.getPunti());  // Aumenta punti
-					System.out.println("\n\nRisposta giusta, ottieni " +q.getPunti()+ " punti");
-					delay(1000);
-					cls();
-					stampaScoreboard();
-					stampaTabellone(tabellone, true);
-					System.out.println("\nScegli una casella da spostare, scrivi in input il suo numero (Non puo' essere la casella iniziale o finale)");
-					int casellaDaSpostare;		// ID della casella da scegliere
-					int posCasellaDaSpostare = 0;	// Posizione della casella da scegliere
-					do {
-						casellaDaSpostare = Leggi.unInt();
-						if(casellaDaSpostare > 0 && casellaDaSpostare < (L_TABELLONE-1)) {
-							break;
-						}
-						System.out.println("Input non valido");
-					} while(true);
-					System.out.println("Sto lanciando il dado...");
-					delay(1000);
-					cls();
-					int d = lanciaDado();
-					System.out.println("E' uscito " +d+ " La casella e' stata scambiata con un'altra distante" +d+ " caselle");
-					for(int i = 1; i < L_TABELLONE; i++) {
-						if(tabellone.nodoIn(i).getElemento() == casellaDaSpostare) {
-							posCasellaDaSpostare = i;
-							break;
-						}
-					}
-					if(posCasellaDaSpostare + d < (L_TABELLONE-1)) {
-						tabellone.swap(posCasellaDaSpostare, posCasellaDaSpostare+d);
-					}
-					else {
-						tabellone.swap(posCasellaDaSpostare, L_TABELLONE-2);
-					}
-					stampaTabellone(tabellone, true);
-					delay(3800);
+			// 
+		
+			Quiz q = domandiere.pescaDomanda();
+			System.out.println(q);
+			char risp;
+			int rispInt = 0;
+			do {
+				risp = Leggi.unChar();
+				if(((int)risp) >= 65 && ((int)risp) <= 68) {
+					rispInt = ((int)risp) - 65;
+				}
+				else if (((int)risp) >= 97 && ((int)risp) <= 100) {
+					rispInt = ((int)risp) - 97;
 				}
 				else {
-					giocatori[turno].halfScore();
-					System.out.println("Risposta sbagliata, punteggio dimezzato");
-					delay(1200);
+					System.out.println("Input non valido");
+					continue;
 				}
+				break;
+			}while(true);
+			if(q.corretta(rispInt)) {
+				giocatori[turno].addScore(q.getPunti());  // Aumenta punti
+				System.out.println("\n\nRisposta giusta, ottieni " +q.getPunti()+ " punti");
+				delay(1000);
+				cls();
+				stampaScoreboard();
+				stampaTabellone(tabellone, true);
+				System.out.println("\nScegli una casella da spostare, scrivi in input il suo numero (Non puo' essere la casella iniziale o finale)");
+				int casellaDaSpostare;		// ID della casella da scegliere
+				int posCasellaDaSpostare = 0;	// Posizione della casella da scegliere
+				do {
+					casellaDaSpostare = Leggi.unInt();
+					if(casellaDaSpostare > 0 && casellaDaSpostare < (L_TABELLONE-1)) {
+						break;
+					}
+					System.out.println("Input non valido");
+				} while(true);
+				System.out.println("Sto lanciando il dado...");
+				delay(1000);
+				cls();
+				int d = lanciaDado();
+				System.out.println("E' uscito " +d+ " La casella e' stata scambiata con un'altra distante" +d+ " caselle");
+				for(int i = 1; i < L_TABELLONE; i++) {
+					if(tabellone.nodoIn(i).getElemento() == casellaDaSpostare) {
+						posCasellaDaSpostare = i;
+						break;
+					}
+				}
+				if(posCasellaDaSpostare + d < (L_TABELLONE-1)) {
+					tabellone.swap(posCasellaDaSpostare, posCasellaDaSpostare+d);
+				}
+				else {
+					tabellone.swap(posCasellaDaSpostare, L_TABELLONE-2);
+				}
+				stampaTabellone(tabellone, true);
+				delay(3800);
 			}
-			
+			else {
+				giocatori[turno].halfScore();
+				System.out.println("Risposta sbagliata, punteggio dimezzato");
+				delay(1200);
+			}
+		
+		
 			// Cambia turno
 			turno++;  
 			if(turno >= nGioc) {

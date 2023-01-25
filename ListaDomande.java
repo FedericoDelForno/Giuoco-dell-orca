@@ -41,6 +41,8 @@ public class ListaDomande {
     public Quiz prossimaDomanda() {
         Quiz q = domande[prossimaDomanda];
         prossimaDomanda++;
+        if(prossimaDomanda >= domande.length)
+        	prossimaDomanda = 0;
         return q;
     }
     
