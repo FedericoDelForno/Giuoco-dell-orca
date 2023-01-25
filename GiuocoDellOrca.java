@@ -115,8 +115,8 @@ public class GiuocoDellOrca {
 		MazzoImprevisti mazzoImprevisti = initMazzoImprevisti(tabellone);
 		mazzoImprevisti.mischia();
 		Domandiere domandiere = new Domandiere(L_LISTA_DOMANDE);
-		
 		LeggiFile.initDomandiere(domandiere);
+		domandiere.mischiaTutto();
 		if(debugMode) {
 			System.out.println(mazzoImprevisti.toString());
 			System.out.println("\n\n");
