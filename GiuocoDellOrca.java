@@ -32,8 +32,8 @@ public class GiuocoDellOrca {
 			}
 			case 0:{
 				// Debug mode
-				giocatori[0] = new Giocatore("@", '@');
-				giocatori[1] = new Giocatore("#", '#');
+				giocatori[0] = new Giocatore("Claudio Bisio", '@');
+				giocatori[1] = new Giocatore("Il Gabibbo", '#');
 				partita(2, true);
 				break;
 			}
@@ -225,7 +225,7 @@ public class GiuocoDellOrca {
 				delay(1000);
 				cls();
 				int d = lanciaDado();
-				System.out.println("E' uscito " +d+ " La casella e' stata scambiata con un'altra distante" +d+ " caselle");
+				System.out.println("E' uscito " +d+ " La casella e' stata scambiata con un'altra distante " +d+ " caselle");
 				for(int i = 1; i < L_TABELLONE; i++) {
 					if(tabellone.nodoIn(i).getElemento() == casellaDaSpostare) {
 						posCasellaDaSpostare = i;
@@ -417,7 +417,7 @@ public class GiuocoDellOrca {
 			if(giocatori[i] == null) {
 				break;
 			}
-			System.out.println(giocatori[i].getTitoloG()+ " " +giocatori[i].getScore() );
+			System.out.println("("+ giocatori[i].getPedina() +") "+ giocatori[i].getTitoloG()+ " " +giocatori[i].getScore() );
 		}
 		for(int i = 0; i < 20; i++)
 			System.out.print("--");

@@ -36,6 +36,8 @@ public class Giocatore {
 	
 	public void setScore(int x) {
 		score = x;
+		if(score < 0)
+			score = 0;
 	}
 
 	/**
@@ -44,6 +46,8 @@ public class Giocatore {
 	 */
 	public void addScore(int addScore) {
 		score = score + addScore;
+		if(score < 0)
+			score = 0;
 	}
 	
 	public void halfScore() {

@@ -120,6 +120,20 @@ public class Quiz {
 	 */
 	public void setDiffic(Diffic diffic) {
 		this.diffic = diffic;
+		switch(diffic) {
+        case FACILE: {
+        	punti = 10;
+        	break;
+        }
+        case MEDIO: {
+        	punti = 30;
+        	break;
+        }
+        case DIFFICILE: {
+        	punti = 50;
+        	break;
+        }
+    }
 	}
 	public void setDiffic(String s) {
 		switch(s) {
